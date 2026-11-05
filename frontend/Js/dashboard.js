@@ -1,49 +1,78 @@
 const API_URL = 'http://localhost:3000';
-
-// --- Auth guard ---
 const token = localStorage.getItem('token');
-const user = JSON.parse(localStorage.getItem('user') || 'null');
+const storedUser = JSON.parse(localStorage.getItem('user') || 'null');
 
-if (!token || !user) {
-    window.location.href = 'index.html'; // not logged in -> back to login
+// Security: If not logged in, kick back to login
+if (!token || !storedUser) {
+    window.location.href = 'index.html';
 }
 
-// --- Welcome message ---
-document.getElementById('welcomeMessage').textContent = `Welcome, ${user.username}!`;
+// Display user info
+document.getElementById('profileHeader').textContent = `Profile: ${storedUser.username}`;
+document.getElementById('email').value = storedUser.email || '';
+document.getElementById('phone').value = storedUser.phone || '';
+document.getElementById('dob').value = storedUser.dob ? storedUser.dob.split('T')[0] : '';
 
-// --- Load protected data using the JWT ---
-async function loadProfile() {
+const successMsg = document.getElementById('successMsg');
+const errorMsg = document.getElementById('errorMsg');
+
+document.getElementById('profileForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    // Validate inputs
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const dob = document.getElementById('dob').value;
+
+    if (!validateEmail(email)) {
+        errorMsg.textContent = "Please enter a valid email address.";
+        errorMsg.style.display = "block";
+        return;
+    }
+    if (!/^\d+$/.test(phone)) {
+        errorMsg.textContent = "Phone number must contain only digits.";
+        errorMsg.style.display = "block";
+        return;
+    }
+
     try {
-        const res = await fetch(`${API_URL}/api/auth/profile`, {
-            headers: { Authorization: `Bearer ${token}` }
+        const res = await fetch(`${API_URL}/api/auth/profile/${storedUser.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ email, phone, dob })
         });
 
-        if (res.status === 401) {
-            // token expired or invalid -> force re-login
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            alert('Your session has expired. Please log in again.');
-            window.location.href = 'index.html';
-            return;
-        }
-
         const data = await res.json();
-        console.log('Protected profile:', data);
-        // render data into the page
-        document.getElementById('profileData').textContent 
-        = `Name: ${data.username},
-            Email: ${data.email},
-            Phone: ${data.phone},
-            Birthdate: ${data.birthdate}`;
+
+        // If update is successful, refresh local storage and UI
+        if (res.ok) {
+            // Update local storage and UI
+            localStorage.setItem('user', JSON.stringify(data.user));
+            document.getElementById('profileHeader').textContent = `Profile: ${data.user.username}`;
+            successMsg.style.display = "block";
+            errorMsg.style.display = "none";
+        } else {
+            errorMsg.textContent = data.message || "Failed to update profile.";
+            errorMsg.style.display = "block";
+            successMsg.style.display = "none";
+        }
     } catch (err) {
-        console.error('Cannot reach server:', err);
+        errorMsg.textContent = "Server error. Please try again.";
+        errorMsg.style.display = "block";
     }
+});
+
+// Helper for validation
+function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
 }
 
-loadProfile();
-
-// --- Logout ---
-document.getElementById('logoutButton').addEventListener('click', function () {
+// Logout: clear stored credentials and redirect to login page
+document.getElementById('logoutBtn').addEventListener('click', () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     window.location.href = 'index.html';
