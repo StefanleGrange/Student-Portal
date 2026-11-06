@@ -1,10 +1,10 @@
-const API_URL = 'https://dreamy-empanada-55a579.netlify.app';
+const API_URL = 'https://student-portal-adla.onrender.com';
 const token = localStorage.getItem('token');
 const storedUser = JSON.parse(localStorage.getItem('user') || 'null');
 
 // Security: If not logged in, kick back to login
 if (!token || !storedUser) {
-    window.location.href = 'index.html';
+    window.location.href = 'https://dreamy-empanada-55a579.netlify.app/index.html';
 }
 
 // Display user info
@@ -75,5 +75,5 @@ function validateEmail(email) {
 document.getElementById('logoutBtn').addEventListener('click', () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    window.location.href = 'index.html';
+    window.location.href = 'https://dreamy-empanada-55a579.netlify.app/index.html';
 });

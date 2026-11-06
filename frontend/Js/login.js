@@ -8,7 +8,7 @@ loginForm.addEventListener("submit", async function (event) {
     const password = document.getElementById("password").value;
 
     try {
-        const res = await fetch('https://dreamy-empanada-55a579.netlify.app/api/auth/login', {
+        const res = await fetch('https://student-portal-adla.onrender.com/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
@@ -20,7 +20,7 @@ loginForm.addEventListener("submit", async function (event) {
             localStorage.setItem('token', data.token);
             // Store user info for the UI
             localStorage.setItem('user', JSON.stringify(data.user));
-            window.location.href = "dashboard.html";
+            window.location.href = "https://dreamy-empanada-55a579.netlify.app/dashboard.html";
         } else {
             // Show error message
             errorMsg.textContent = data.message || "Invalid username or password";

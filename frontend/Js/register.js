@@ -12,7 +12,7 @@ registerForm.addEventListener('submit', async function (event) {
     const password = document.getElementById('password').value;
 
     try {
-        const res = await fetch('https://dreamy-empanada-55a579.netlify.app/api/auth/register', {
+        const res = await fetch('https://student-portal-adla.onrender.com/api/auth/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, email, phone, dob, password })
@@ -22,7 +22,7 @@ registerForm.addEventListener('submit', async function (event) {
         // If registration succeeds, alert user and redirect to login
         if (res.ok) {
             alert('Registration successful! Please log in.');
-            window.location.href = 'index.html';
+            window.location.href = 'https://dreamy-empanada-55a579.netlify.app/index.html';
         } else {
             errorMsg.textContent = data.message || "Registration failed";
             errorMsg.style.display = "block";
