@@ -22,7 +22,7 @@ registerForm.addEventListener('submit', async function (event) {
         // If registration succeeds, alert user and redirect to login
         if (res.ok) {
             alert('Registration successful! Please log in.');
-            window.location.href = 'index.html';
+            window.location.href = '../index.html';
         } else {
             errorMsg.textContent = data.message || "Registration failed";
             errorMsg.style.display = "block";
