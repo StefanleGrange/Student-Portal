@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000';
+const API_URL = 'https://dreamy-empanada-55a579.netlify.app';
 const token = localStorage.getItem('token');
 const storedUser = JSON.parse(localStorage.getItem('user') || 'null');
 

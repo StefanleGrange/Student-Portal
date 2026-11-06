@@ -12,7 +12,7 @@ registerForm.addEventListener('submit', async function (event) {
     const password = document.getElementById('password').value;
 
     try {
-        const res = await fetch('http://localhost:3000/api/auth/register', {
+        const res = await fetch('https://dreamy-empanada-55a579.netlify.app/api/auth/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, email, phone, dob, password })
