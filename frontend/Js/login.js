@@ -20,7 +20,7 @@ loginForm.addEventListener("submit", async function (event) {
             localStorage.setItem('token', data.token);
             // Store user info for the UI
             localStorage.setItem('user', JSON.stringify(data.user));
-            window.location.href = "https://dreamy-empanada-55a579.netlify.app/dashboard.html";
+            window.location.href = "dashboard.html";
         } else {
             // Show error message
             errorMsg.textContent = data.message || "Invalid username or password";

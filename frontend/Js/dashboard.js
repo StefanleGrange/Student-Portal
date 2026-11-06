@@ -4,7 +4,7 @@ const storedUser = JSON.parse(localStorage.getItem('user') || 'null');
 
 // Security: If not logged in, kick back to login
 if (!token || !storedUser) {
-    window.location.href = 'https://dreamy-empanada-55a579.netlify.app/index.html';
+    window.location.href = 'index.html';
 }
 
 // Display user info
@@ -75,5 +75,5 @@ function validateEmail(email) {
 document.getElementById('logoutBtn').addEventListener('click', () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    window.location.href = 'https://dreamy-empanada-55a579.netlify.app/index.html';
+    window.location.href = 'index.html';
 });
